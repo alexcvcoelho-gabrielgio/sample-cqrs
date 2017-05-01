@@ -1,0 +1,28 @@
+@startuml
+
+package "User API" {
+    [QueryUser]
+    [CommandUser]
+}
+
+package Process{
+    [UserP]
+}
+
+database redis
+database mongo
+database datomic
+
+
+
+CommandUser "\nWrites Commands"-right-> redis
+QueryUser "\nRequest info"-right-> mongo
+
+redis "Event Soucing"-right-> UserP
+
+UserP "Writes cache"-left-> mongo
+
+UserP "Writes history\nWrites update"--> datomic
+
+
+@enduml

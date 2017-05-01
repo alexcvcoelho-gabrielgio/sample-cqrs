@@ -1,0 +1,15 @@
+@startuml
+UI --> API: Sends a update message
+API --> UI: Sends back a link /user/profile/123 that is not yet processed
+API --> KAFKA: Writes a command to a topic
+KAFKA --> UserProcess: sends command
+UserProcess --> UserProcess: validation and business
+UserProcess --> Datomic: update information
+UserProcess --> Mongo: update cache
+newpage
+UI --> API: calls for /user/profile/123
+API --> API: verifies command status
+API --> Mongo: query information
+API <-- Mongo: cached information
+API --> UI: information
+@enduml
